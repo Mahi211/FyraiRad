@@ -3,51 +3,56 @@ using System.Runtime.CompilerServices;
 
 
 
-List<Triangle> listOfTriangles = new();
-int triangleCount = 0;
+    List<Triangle> listOfTriangles = new();
+    int triangleCount = 0;
 
-bool IsTriangle(Triangle triangleInput)
-{
-    if ((triangleInput.FirstSide + triangleInput.SecondSide > triangleInput.ThirdSide)
-       && (triangleInput.SecondSide + triangleInput.ThirdSide > triangleInput.FirstSide)
-       && (triangleInput.ThirdSide + triangleInput.FirstSide > triangleInput.SecondSide))
+    bool IsTriangle(Triangle triangleInput)
     {
-        return true;
+        if ((triangleInput.FirstSide + triangleInput.SecondSide > triangleInput.ThirdSide)
+           && (triangleInput.SecondSide + triangleInput.ThirdSide > triangleInput.FirstSide)
+           && (triangleInput.ThirdSide + triangleInput.FirstSide > triangleInput.SecondSide))
+        {
+            return true;
+        }
+        return false;
     }
-    return false;
-}
 
-string[] lines = File.ReadAllLines("input.txt");
+    string[] lines = File.ReadAllLines("input.txt");
 
 
 
-foreach (string line in lines)
-{
-    
-    var lineArray = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-  
-    listOfTriangles.Add(new Triangle { FirstSide = Convert.ToInt32(lineArray[0]),
-        SecondSide = Convert.ToInt32(lineArray[1]),
-    ThirdSide = Convert.ToInt32(lineArray[2])});
-}
-
-foreach (var triangle1 in listOfTriangles)
-{
-    var isValidTriangle = IsTriangle(triangle1);
-    if (isValidTriangle)
+    for(int i = 0;  i < (lines.Length - 2); i += 3) 
     {
-        triangleCount++;
+        var lineArray = lines[i].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        var nextLine = lines[i + 1].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        var thirdLine = lines[i + 2].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int j = 0; j < 3; j++)
+        {
+            listOfTriangles.Add(new Triangle
+            {
+                FirstSide = Convert.ToInt32(lineArray[j]),
+                SecondSide = Convert.ToInt32(nextLine[j]),
+                ThirdSide = Convert.ToInt32(thirdLine[j])
+            });
+        }
     }
-}
 
-Console.WriteLine(triangleCount);
+    foreach (var triangle1 in listOfTriangles)
+    {
+        var isValidTriangle = IsTriangle(triangle1);
+        if (isValidTriangle)
+        {
+            triangleCount++;
+        }
+    }
 
-public class Triangle
-{
-    public int FirstSide { get; set; }
-    public int SecondSide { get; set; }
-    public int ThirdSide { get; set; }
+    Console.WriteLine(triangleCount);
+
+    public class Triangle
+    {
+        public int FirstSide { get; set; }
+        public int SecondSide { get; set; }
+        public int ThirdSide { get; set; }
 
 
-}
+    }
